@@ -1,0 +1,26 @@
+{
+  "name": "apirestful-app-games",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "ejs": "^2.5.8",
+    "es6-promise": "^4.2.4",
+    "express": "^4.16.3",
+    "express-validator": "^5.1.2",
+    "file-system": "^2.2.2",
+    "moment": "^2.22.1",
+    "mongodb": "^3.0.7",
+    "mongoose": "^5.0.16",
+    "nodejs": "^0.0.0",
+    "request": "~2.85.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node run.js"
+  },
+  "author": "Ricardo Gomes Saraiva",
+  "license": "ISC"
+}
