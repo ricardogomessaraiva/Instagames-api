@@ -1,9 +1,9 @@
-//const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5001;
 
 module.exports = function () {
     var express = require('express');
     var app = express();
-    var bodyParser = require('body-parser');    
+    var bodyParser = require('body-parser');
     var mongoose = require('mongoose'),
         es6Promise = require('es6-promise');
     mongoose.Promise = es6Promise.Promise;
@@ -13,7 +13,7 @@ module.exports = function () {
 
     //MIDDLEWARES
     app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());    
+    app.use(bodyParser.json());
 
     app.use(function (req, res, next) {
         res.setHeader("Access-Control-Allow-Origin", "*");
@@ -24,8 +24,8 @@ module.exports = function () {
         next();
     });
 
-    app.listen(5001);
-    console.log("API Server is up on port 5001 at " + Date());
+    app.listen(PORT);
+    console.log("API Server is up on port " + PORT + " at " + Date());
 
     require('../app/routes/route')(express, app);
 
