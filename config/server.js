@@ -26,8 +26,9 @@ module.exports = function () {
 
     require('../app/routes/route')(express, app);
 
-    app.listen(PORT);
     console.log("API Server is up on port " + PORT + " at " + Date());
+    app.listen(PORT);
+    
 
 
 };
