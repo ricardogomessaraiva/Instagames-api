@@ -4,9 +4,8 @@ module.exports.uploadFile = function (imgName, originalPath, applicationFolder) 
     imgName = time_stamp + '_' + imgName;
 
     var path = require('path');
-    var appDir = path.dirname(require.main.filename);
-    // var _destinationPath = appDir + '/app/' + applicationFolder + '/' + imgName;
-    var _destinationPath = appDir + '/' + applicationFolder + '/' + imgName;
+    var appDir = path.dirname(require.main.filename);    
+    var _destinationPath = appDir + '/app/' + applicationFolder + '/' + imgName;    
 
     console.log(_destinationPath);
     var response = { error: false, message: null, name: imgName, destinationPath: _destinationPath };
