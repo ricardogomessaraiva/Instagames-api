@@ -17,6 +17,9 @@ module.exports.getPosts = function (req, res) {
 };
 
 module.exports.save = function (req, res) {    
+    console.log('Acionando upload file');
+    console.log(req.body);
+    
     var response = helper.uploadFile(req.body.imgName, req.body.imgPath, 'uploads');
     if (response.error) {
         res.status(500).json({ message: response.message });
