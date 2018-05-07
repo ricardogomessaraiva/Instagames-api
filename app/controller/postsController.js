@@ -2,24 +2,21 @@ var Post = require('../models/post'),
     moment = require('moment'),
     helper = require('../../external_modules/helper');
 
-module.exports.getPosts = function (req, res) {        
+module.exports.getPosts = function (req, res) {
     Post.find().sort({ createdAt: 'desc' }).exec(
-        function (error, response) {            
+        function (error, response) {
             if (error) {
                 console.log('API get posts fail.');
                 res.status(500).json({ message: 'Ocorreu um erro: ' + error, posts: null });
                 return;
             }
-            
+
             console.log('API get posts successful');
-            res.status(200).json({ message: 'Busca realizada com sucesso!', posts: response });                        
+            res.status(200).json({ message: 'Busca realizada com sucesso!', posts: response });
         });
 };
 
-module.exports.save = function (req, res) {    
-    console.log('Acionando upload file');
-    console.log(req.body);
-    
+module.exports.save = function (req, res) {
     var response = helper.uploadFile(req.body.imgName, req.body.imgPath, 'uploads');
     if (response.error) {
         res.status(500).json({ message: response.message });
@@ -51,7 +48,7 @@ module.exports.save = function (req, res) {
     })
 };
 
-module.exports.comment = function (req, res) {    
+module.exports.comment = function (req, res) {
     Post.findById(req.body.id, function (error, post) {
         if (error) {
             res.json(error);
@@ -101,9 +98,13 @@ module.exports.feedback = function (req, res) {
     });
 };
 
-module.exports.getImage = function (req, res) {    
+module.exports.getImage = function (req, res) {
+    var path = require('path');
+    var appDir = path.dirname(require.main.filename);
+    var imagePath = appDir + '/app/uploads/' + req.params.image;    
+
     var fs = require('file-system');
-    fs.readFile('./app/uploads/' + req.params.image, function (err, content) {
+    fs.readFile(imagePath, function (err, content) {
         if (err) {
             console.log(err);
             res.end();
