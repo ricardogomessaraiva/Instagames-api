@@ -25,9 +25,9 @@ module.exports = function (express, app) {
         });
     
     router.route('/posts/image/:image')    
-        .get(function (req, res) {
-            console.log('API get image param -> ' + req.params.image);
-            postsController.getImage(req, res);
+        .get(function (req, res) {            
+            // postsController.getImage(req, res);
+            postsController.image(req, res);
         });
 
         

@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "aws-sdk": "^2.233.1",
     "body-parser": "^1.18.2",
+    "config": "^1.30.0",
     "ejs": "^2.5.8",
     "es6-promise": "^4.2.4",
     "express": "^4.16.3",

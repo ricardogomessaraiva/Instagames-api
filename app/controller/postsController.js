@@ -17,13 +17,13 @@ module.exports.getPosts = function (req, res) {
 };
 
 module.exports.save = function (req, res) {
-    var response = helper.uploadFile(req.body.imgName, req.body.imgPath, 'uploads');
+    var response = helper.upload(req.body.imgName, req.body.imgPath);    
+
     if (response.error) {
-        res.status(500).json({ message: response.message });
-        return;
+        return res.status(500).json({ message: 'Ocorreu um erro: ' + response.message });
     }
-    var imageFinalPath = response.destinationPath;
-    var imageName = response.name;
+
+    var imageName = response.imageName;    
 
     var post = new Post({
         name: req.body.name,
@@ -31,13 +31,14 @@ module.exports.save = function (req, res) {
         platform: req.body.platform,
         title: req.body.title,
         description: req.body.description,
-        imageName: imageName,
+        imageURL: 'https://s3.amazonaws.com/instagames/images/' + imageName,
         createdAt: moment(new Date()).format('DD-MM-YYYY HH:mm'),
         likes: 0,
         dislikes: 0,
         comments: []
     });
 
+    console.log(post);
     post.save(function (error) {
         if (error) {
             res.status(500).json({ message: 'Ocorreu um erro: ' + error });
@@ -46,6 +47,44 @@ module.exports.save = function (req, res) {
 
         res.status(201).json({ message: 'Dados salvos com sucesso!' });
     })
+};
+
+module.exports.image = function (req, res) {
+    console.log('Nome imagem -------> ' + req.params.image);
+    var imageName = req.params.image;
+
+    var fs = require('file-system'),
+        AWS = require('aws-sdk'),
+        s3 = new AWS.S3({
+            accessKeyId: CONFIG.get('AWS_S3.ACCESS_KEY'),
+            secretAccessKey: CONFIG.get('AWS_S3.USER_SECRET'),
+            Bucket: CONFIG.get('AWS_S3.BUCKET_NAME')
+        });
+
+    var params = {
+        Bucket: CONFIG.get('AWS_S3.BUCKET_NAME'),
+        Key: imageName
+    };
+
+    var file = fs.createWriteStream('./app/uploads/' + imageName, function (error) {
+        console.log('deu erro aqui professora')
+    });
+
+    // s3.getObject(params).createReadStream().pipe(file).on('error', error => {        
+    //     console.log(error);
+    // });
+
+    fs.readFile('./app/uploads/1525739272646_samurai_shadown.jpeg', function (err, content) {
+        if (err) {
+            console.log(err);
+            return res.end();
+        } else {
+            res.writeHead(200, { 'content-type': 'image/jpg' });
+            return res.end(content);
+        }
+    });
+
+
 };
 
 module.exports.comment = function (req, res) {
@@ -99,12 +138,30 @@ module.exports.feedback = function (req, res) {
 };
 
 module.exports.getImage = function (req, res) {
-    var path = require('path');
-    var appDir = path.dirname(require.main.filename);
-    var imagePath = appDir + '/app/uploads/' + req.params.image;    
+    console.log('Nome imagem ->> ' + req.params.image);
+    var imageName = req.params.image;
 
-    var fs = require('file-system');
-    fs.readFile(imagePath, function (err, content) {
+    var fs = require('file-system'),
+        AWS = require('aws-sdk'),
+        s3 = new AWS.S3({
+            accessKeyId: CONFIG.get('AWS_S3.ACCESS_KEY'),
+            secretAccessKey: CONFIG.get('AWS_S3.USER_SECRET'),
+            Bucket: CONFIG.get('AWS_S3.BUCKET_NAME')
+        });
+
+    var params = {
+        Bucket: CONFIG.get('AWS_S3.BUCKET_NAME'),
+        Key: imageName
+    };
+
+    console.log(params);
+    var file = fs.createWriteStream('./app/uploads/' + imageName);
+
+    s3.getObject(params).createReadStream().pipe(file);
+
+    fs.readFile('./app/uploads/1525732462318_samurai_shadown.jpeg', function (err, content) {
+        //fs.readFile('./app/uploads/1525732462319_samurai_shadown.jpeg', function (err, content) {
+        //fs.readFile('./app/uploads/' + imageName, function (err, content) {
         if (err) {
             console.log(err);
             res.end();
@@ -113,4 +170,7 @@ module.exports.getImage = function (req, res) {
             res.end(content);
         }
     });
+
+
 };
+

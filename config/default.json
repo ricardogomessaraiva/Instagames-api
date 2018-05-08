@@ -1,0 +1,7 @@
+{
+    "AWS_S3": {
+        "ACCESS_KEY": "AKIAIJEPBPCH2WRR2HZA",
+        "USER_SECRET": "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",
+        "BUCKET_NAME": "instagames/images"
+    }
+}

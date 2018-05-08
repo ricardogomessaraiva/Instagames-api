@@ -1,26 +1,25 @@
-var fs = require('file-system');
-module.exports.uploadFile = function (imgName, originalPath, applicationFolder) {
-    var time_stamp = new Date().getTime();
-    imgName = time_stamp + '_' + imgName;
+module.exports.upload = function (imgName, originalPath) {
+    imgName = new Date().getTime() + '_' + imgName;
+    var response = { error: false, imageName: imgName, message: 'Upload realizado com sucesso!' }
+        fileStream = require('file-system').createReadStream(originalPath),
+        params = {
+            Bucket: CONFIG.get('AWS_S3.BUCKET_NAME'),
+            Key: imgName,
+            Body: fileStream
+        };
 
-    var path = require('path');
-    var appDir = path.dirname(require.main.filename);    
-    var _destinationPath = appDir + '/app/' + applicationFolder + '/' + imgName;    
+    var AWS = require('aws-sdk'),
+        s3 = new AWS.S3({
+            accessKeyId: CONFIG.get('AWS_S3.ACCESS_KEY'),
+            secretAccessKey: CONFIG.get('AWS_S3.USER_SECRET'),
+            Bucket: CONFIG.get('AWS_S3.BUCKET_NAME')
+        });
 
-    console.log(_destinationPath);
-    var response = { error: false, message: null, name: imgName, destinationPath: _destinationPath };
-
-    console.log('destino -> ' + _destinationPath);
-    console.log('original path: ' + originalPath);
-
-
-    fs.createReadStream(originalPath).pipe(fs.createWriteStream(_destinationPath), function (error) {
-        if (error) {
-            console.log('Falha ao fazer upload do arquivo: ' + error);
-            response = { error: true, message: error };
-        }
+    s3.putObject(params, function (err, data) {
+        if (err) {
+            response = { error: true, imageName: imgName, message: err.stack };
+        }       
     });
 
-    console.log(response);
     return response;
 };

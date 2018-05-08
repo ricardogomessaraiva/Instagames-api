@@ -5,7 +5,7 @@ var Post = new Schema({
     platform:String,
     title:String,
     description:String,
-    imageName: String,
+    imageURL: String,
     createdAt: String,
     likes: Number,
     dislikes: Number,
