@@ -17,13 +17,16 @@ module.exports.getPosts = function (req, res) {
 };
 
 module.exports.save = function (req, res) {
-    var response = helper.upload(req.body);    
+    var response = helper.upload(req.body);
 
     if (response.error) {
         return res.status(500).json({ message: 'Ocorreu um erro: ' + response.message });
     }
 
-    var imageName = response.imageName;    
+    var imageName = response.imageName;
+    var date = new Date();
+    date.setHours(date.getHours() - 3);
+    date = moment(date).format('DD-MM-YYYY HH:mm');//To represent datetime from Brazil in production
 
     var post = new Post({
         name: req.body.name,
@@ -32,7 +35,8 @@ module.exports.save = function (req, res) {
         title: req.body.title,
         description: req.body.description,
         imageURL: 'https://s3.amazonaws.com/instagames/images/' + imageName,
-        createdAt: moment(new Date()).format('DD-MM-YYYY HH:mm'),
+        // createdAt: moment(new Date()).format('DD-MM-YYYY'),
+        createdAt: date,
         likes: 0,
         dislikes: 0,
         comments: []
@@ -55,10 +59,15 @@ module.exports.comment = function (req, res) {
             res.json(error);
         }
 
+        var date = new Date();
+        date.setHours(date.getHours() - 3);
+        date = moment(date).format('DD-MM-YYYY HH:mm');//To represent datetime from Brazil in production
+
         post.comments.push({
             "name": req.body.author,
             "comment": req.body.comment,
-            "createdAt": moment(new Date()).format('DD-MM-YYYY HH:mm')
+            // "createdAt": moment(new Date()).format('DD-MM-YYYY HH:mm')
+            "createdAt": date
         });
 
         console.log(post);
