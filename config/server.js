@@ -2,11 +2,11 @@ const PORT = (process.env.PORT || 5001);
 
 module.exports = function () {
     var express = require('express'),
-         app = express();
+        app = express();
 
-    global.CONFIG = require('config');        
-    
-    var bodyParser = require('body-parser')
+    global.CONFIG = require('config');
+
+    var bodyParser = require('body-parser'),
         mongoose = require('mongoose'),
         es6Promise = require('es6-promise');
     mongoose.Promise = es6Promise.Promise;
@@ -14,8 +14,8 @@ module.exports = function () {
     mongoose.connect('mongodb://admin:245182@ds014648.mlab.com:14648/posts');
 
     //MIDDLEWARES
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
+    app.use(bodyParser.json({ limit: '5mb' }));
+    app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 
     app.use(function (req, res, next) {
         res.setHeader("Access-Control-Allow-Origin", "*");

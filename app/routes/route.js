@@ -13,24 +13,24 @@ module.exports = function (express, app) {
         .post(function (req, res) {            
             postsController.save(req, res);
         });
-    
+
     router.route('/posts/comment')
         .put(function (req, res) {
             postsController.comment(req, res);
         });
-    
+
     router.route('/posts/feedback')
-        .put(function (req, res) {            
+        .put(function (req, res) {
             postsController.feedback(req, res);
         });
-    
-    router.route('/posts/image/:image')    
-        .get(function (req, res) {            
+
+    router.route('/posts/image/:image')
+        .get(function (req, res) {
             // postsController.getImage(req, res);
             postsController.image(req, res);
         });
 
-        
+
     /********** Entity User *********/
     router.route('/user')
         .post(function (req, res) {
@@ -38,11 +38,11 @@ module.exports = function (express, app) {
         });
 
     router.route('/user/new')
-        .post(function (req, res) {            
+        .post(function (req, res) {
             usersController.add(req, res);
         });
 
 
     app.use('/api', router);
-    return router;    
+    return router;
 };

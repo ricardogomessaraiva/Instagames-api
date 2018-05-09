@@ -1,11 +1,12 @@
-module.exports.upload = function (imgName, originalPath) {
-    imgName = new Date().getTime() + '_' + imgName;
-    var response = { error: false, imageName: imgName, message: 'Upload realizado com sucesso!' }
-        fileStream = require('file-system').createReadStream(originalPath),
+module.exports.upload = function (body) {    
+    var fs = require('file-system'),
+        buffer = new Buffer(body.imageBuffer.data, 'base64'),
+        imgName = new Date().getTime() + '_' + body.imgName,
+        response = { error: false, imageName: imgName, message: 'Upload realizado com sucesso!' },
         params = {
             Bucket: CONFIG.get('AWS_S3.BUCKET_NAME'),
             Key: imgName,
-            Body: fileStream
+            Body: buffer
         };
 
     var AWS = require('aws-sdk'),
@@ -18,7 +19,7 @@ module.exports.upload = function (imgName, originalPath) {
     s3.putObject(params, function (err, data) {
         if (err) {
             response = { error: true, imageName: imgName, message: err.stack };
-        }       
+        }
     });
 
     return response;
