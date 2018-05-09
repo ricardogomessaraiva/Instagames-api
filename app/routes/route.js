@@ -22,14 +22,7 @@ module.exports = function (express, app) {
     router.route('/posts/feedback')
         .put(function (req, res) {
             postsController.feedback(req, res);
-        });
-
-    router.route('/posts/image/:image')
-        .get(function (req, res) {
-            // postsController.getImage(req, res);
-            postsController.image(req, res);
-        });
-
+        });   
 
     /********** Entity User *********/
     router.route('/user')

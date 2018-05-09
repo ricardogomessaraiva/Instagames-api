@@ -26,8 +26,7 @@ module.exports.validation = function (req, res) {
         });
 };
 
-module.exports.add = function(req, res){
-    console.log('chegou no add')
+module.exports.add = function(req, res){    
     Users.findOne({ 'username': req.body.username }, function (err, _user) {
         if (err) {            
             return res.status(500).json({ message: 'Falha ao consultar existência do usuário: '+err, user: null });            

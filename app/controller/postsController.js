@@ -49,44 +49,6 @@ module.exports.save = function (req, res) {
     })
 };
 
-module.exports.image = function (req, res) {
-    console.log('Nome imagem -------> ' + req.params.image);
-    var imageName = req.params.image;
-
-    var fs = require('file-system'),
-        AWS = require('aws-sdk'),
-        s3 = new AWS.S3({
-            accessKeyId: CONFIG.get('AWS_S3.ACCESS_KEY'),
-            secretAccessKey: CONFIG.get('AWS_S3.USER_SECRET'),
-            Bucket: CONFIG.get('AWS_S3.BUCKET_NAME')
-        });
-
-    var params = {
-        Bucket: CONFIG.get('AWS_S3.BUCKET_NAME'),
-        Key: imageName
-    };
-
-    var file = fs.createWriteStream('./app/uploads/' + imageName, function (error) {
-        console.log('deu erro aqui professora')
-    });
-
-    // s3.getObject(params).createReadStream().pipe(file).on('error', error => {        
-    //     console.log(error);
-    // });
-
-    fs.readFile('./app/uploads/1525739272646_samurai_shadown.jpeg', function (err, content) {
-        if (err) {
-            console.log(err);
-            return res.end();
-        } else {
-            res.writeHead(200, { 'content-type': 'image/jpg' });
-            return res.end(content);
-        }
-    });
-
-
-};
-
 module.exports.comment = function (req, res) {
     Post.findById(req.body.id, function (error, post) {
         if (error) {
@@ -131,46 +93,7 @@ module.exports.feedback = function (req, res) {
             }
         });
 
-
         console.log({ status: 201, message: 'Dados salvos com sucesso!' });
         res.status(201).json({ message: 'Dados salvos com sucesso!' });
     });
 };
-
-module.exports.getImage = function (req, res) {
-    console.log('Nome imagem ->> ' + req.params.image);
-    var imageName = req.params.image;
-
-    var fs = require('file-system'),
-        AWS = require('aws-sdk'),
-        s3 = new AWS.S3({
-            accessKeyId: CONFIG.get('AWS_S3.ACCESS_KEY'),
-            secretAccessKey: CONFIG.get('AWS_S3.USER_SECRET'),
-            Bucket: CONFIG.get('AWS_S3.BUCKET_NAME')
-        });
-
-    var params = {
-        Bucket: CONFIG.get('AWS_S3.BUCKET_NAME'),
-        Key: imageName
-    };
-
-    console.log(params);
-    var file = fs.createWriteStream('./app/uploads/' + imageName);
-
-    s3.getObject(params).createReadStream().pipe(file);
-
-    fs.readFile('./app/uploads/1525732462318_samurai_shadown.jpeg', function (err, content) {
-        //fs.readFile('./app/uploads/1525732462319_samurai_shadown.jpeg', function (err, content) {
-        //fs.readFile('./app/uploads/' + imageName, function (err, content) {
-        if (err) {
-            console.log(err);
-            res.end();
-        } else {
-            res.writeHead(200, { 'content-type': 'image/jpg' });
-            res.end(content);
-        }
-    });
-
-
-};
-
