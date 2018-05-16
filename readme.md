@@ -12,7 +12,5 @@ Express
 MongoDB - hospedado no mLab ( mLab is the leading Database-as-a-Service for MongoDB.)
 ## ORM: 
 Mongoose
-## Comunicação: 
-API RESTFul desenvolvida em NodeJS e Express
-## Upload: 
+## Upload imagens: 
 Amazon AWS S3
